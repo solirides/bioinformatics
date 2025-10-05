@@ -64,13 +64,19 @@ A more detailed timeline lives in `docs/roadmap.md` (created later in the schedu
    python -m pip install -r backend/requirements.txt
    ```
 
-3. Run the FastAPI dev server:
+3. Apply the latest database migration (SQLite by default):
 
-   ```powershell
-   uvicorn app.main:app --reload --app-dir backend
-   ```
+    ```powershell
+    alembic -c backend\alembic.ini upgrade head
+    ```
 
-4. Open http://127.0.0.1:8000/docs to explore the interactive OpenAPI documentation.
+4. Run the FastAPI dev server from the project root:
+
+    ```powershell
+    uvicorn app.main:app --reload --port 8000
+    ```
+
+5. Open http://127.0.0.1:8000/docs to explore the interactive OpenAPI documentation.
 
 ## Contributing
 

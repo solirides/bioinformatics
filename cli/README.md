@@ -1,13 +1,30 @@
-# PGIP CLI (Placeholder)
+# PGIP CLI
 
-The PGIP command-line interface will provide power users with scripted access to variant search, plugin execution, workflow submission, and dataset management. This README tracks the evolving interface design.
+Typer-based command-line interface for interacting with the PGIP backend. The initial commands focus on plugin registry management; future iterations will add ingestion, workflow submission, and cohort operations.
 
-## Proposed Features
+## Setup
 
-- `pgip ingest` – Register new VCFs, GFA graphs, or expression matrices
-- `pgip annotate` – Trigger annotation plugin runs and monitor provenance
-- `pgip plugins` – List available plugins, inspect manifests, manage versions
-- `pgip cohort` – Manage cohort metadata, summary statistics, and permissions
-- `pgip export` – Extract results for downstream analysis (CSV/Parquet/JSON-L)
+```powershell
+python -m venv .venv
+.\.venv\Scripts\activate
+pip install -e .
+```
 
-Implementation will begin once the backend API stabilizes. Feel free to draft CLI usage examples or propose additional commands in GitHub issues.
+Alternatively run in editable mode without a venv if you already have one active. The CLI expects the backend API to be reachable at `http://localhost:8000` by default; override with the environment variable `PGIP_BACKEND_URL`.
+
+## Usage
+
+```powershell
+pgip plugins list
+pgip plugins show frequency-aggregator
+pgip plugins register path\to\manifest.json
+```
+
+Add `--api-url` to any command to target a different backend. The `register` command validates manifests using the same schema as the FastAPI service and reports rich error messages when fields are missing.
+
+## Roadmap
+
+- `pgip ingest` – Submit dataset ingestion jobs via Nextflow
+- `pgip workflows` – Monitor pipeline status and logs
+- `pgip cohort` – Manage cohort metadata and summary statistics exports
+- Auth integration for multi-user mode

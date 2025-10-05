@@ -5,9 +5,10 @@ This directory contains the FastAPI service responsible for orchestrating workfl
 ## Features (MVP)
 
 - `/health` heartbeat endpoint for service monitoring
-- `/api/v1/plugins/` listing endpoint returning sample manifest data
+- `/api/v1/plugins/` CRUD endpoints backed by a relational database
 - CORS configuration for future frontend integration
 - Pydantic-based settings management via environment variables
+- SQLAlchemy models and Alembic configuration for schema management
 
 ## Local Development
 
@@ -27,6 +28,19 @@ pytest
 uvicorn app.main:app --reload
 ```
 
+By default the application uses SQLite for convenience. To connect to PostgreSQL, set:
+
+```powershell
+$env:PGIP_DATABASE_URL = "postgresql+asyncpg://pgip:pgip@localhost:5432/pgip"
+```
+
+You can manage migrations with Alembic:
+
+```powershell
+alembic revision --autogenerate -m "create plugins table"
+alembic upgrade head
+```
+
 Environment variables can be defined in a `.env` file at the project root. The following settings are currently supported:
 
 - `PGIP_API_V1_PREFIX`
@@ -35,9 +49,11 @@ Environment variables can be defined in a `.env` file at the project root. The f
 - `PGIP_ALLOWED_ORIGINS`
 - `PGIP_DOCS_URL`
 - `PGIP_OPENAPI_URL`
+- `PGIP_DATABASE_URL`
+- `PGIP_DATABASE_ECHO`
 
 ## Next Steps
 
-- Replace the in-memory plugin manifest with persistence (PostgreSQL)
-- Add gRPC or message bus integration for workflow orchestration
+- Add provenance tracking for plugin execution runs
+- Integrate workflow orchestration callbacks (e.g., message bus notifications)
 - Introduce authentication/authorization once multi-user mode begins

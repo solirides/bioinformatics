@@ -1,19 +1,41 @@
 """FastAPI application entrypoint for PGIP."""
 
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes import health as health_routes
 from app.api.routes import plugins as plugins_routes
 from app.core.config import get_settings
+from app.db.session import create_all, get_engine, init_engine
 
 settings = get_settings()
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    """Initialize and tear down shared resources for the application."""
+
+    init_engine()
+    await create_all()
+
+    try:
+        yield
+    finally:
+        try:
+            engine = get_engine()
+        except RuntimeError:  # pragma: no cover - defensive guard
+            return
+
+        await engine.dispose()
+
 
 app = FastAPI(
     title=settings.project_name,
     description=settings.description,
     docs_url=settings.docs_url,
     openapi_url=settings.openapi_url,
+    lifespan=lifespan,
 )
 
 app.add_middleware(

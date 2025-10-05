@@ -1,20 +1,37 @@
-# PGIP Frontend (Placeholder)
+# PGIP Frontend
 
-This directory will house the TypeScript/React application for exploring pangenome graphs, annotations, and benchmarking dashboards. The UI implementation begins in a later milestone. For now, this README captures design intentions and component sketches.
+The frontend is a Vite + React + TypeScript application that surfaces plugin metadata, provenance details, and (later) graph-aware visualizations. This initial shell focuses on wiring the project, fetching data from the backend, and sketching the navigation layout.
 
-## Planned Tech Stack
+## Getting Started
 
-- React (with Vite) + TypeScript
-- GraphQL client (Urql or Apollo)
-- TailwindCSS + headless UI primitives
-- D3/React Flow/HiGlass for interactive genome and graph visualization
-- State management via Zustand
+```powershell
+npm install
+npm run dev
+```
 
-## Early Ideas
+The development server defaults to http://localhost:5173 and proxies API calls to `VITE_API_URL` (defaults to http://localhost:8000). Override the backend target via:
 
-- Variant search bar with autosuggest (ES-backed)
-- Graph diff viewer comparing individuals vs pangenome paths
-- Annotation provenance timeline and benchmarking charts
-- Expression overlay heatmaps from GTEx
+```powershell
+$env:VITE_API_URL = "http://localhost:8000"
+npm run dev
+```
 
-Contributions focused on design mockups, UX research, or component prototyping are welcome even before the full stack is in place.
+## Available Pages
+
+- **Dashboard** – Landing page outlining project goals and upcoming widgets.
+- **Plugin Registry** – Lists plugins from the FastAPI backend using React Query.
+- **Plugin Detail** – Displays manifest information, inputs/outputs, and provenance.
+
+## Tech Stack
+
+- React 18 with React Router
+- Vite for development/build tooling
+- React Query for data fetching and caching
+- Axios for API requests
+
+## Next UI Iterations
+
+- Integrate design system tokens and theming
+- Add charts/visualizations for pipeline health and benchmarking results
+- Create shared components (tables, badges, copy-to-clipboard, etc.)
+- Implement authentication-aware navigation once backend supports it

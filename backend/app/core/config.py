@@ -18,6 +18,8 @@ class Settings(BaseSettings):
     allowed_origins: List[str] = ["*"]
     docs_url: str = "/docs"
     openapi_url: str = "/openapi.json"
+    database_url: str = "sqlite+aiosqlite:///./pgip.db"
+    database_echo: bool = False
 
     model_config = SettingsConfigDict(env_prefix="PGIP_", env_file=".env", env_file_encoding="utf-8")
 

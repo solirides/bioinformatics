@@ -3,7 +3,7 @@
 from datetime import datetime
 from typing import List, Literal, Optional
 
-from pydantic import BaseModel, HttpUrl, field_validator
+from pydantic import BaseModel, ConfigDict, HttpUrl, field_validator
 
 
 class PluginInput(BaseModel):
@@ -56,6 +56,8 @@ class PluginProvenance(BaseModel):
 class PluginManifest(BaseModel):
     """Top-level manifest describing a PGIP plugin."""
 
+    model_config = ConfigDict(from_attributes=True)
+
     name: str
     version: str
     description: str
@@ -72,6 +74,8 @@ class PluginManifest(BaseModel):
 
 class PluginSummary(BaseModel):
     """Response model summarizing a plugin for API responses."""
+
+    model_config = ConfigDict(from_attributes=True)
 
     name: str
     version: str
